@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6d8e7">
+<meta name="description" content="A gentle, supportive AI companion demo">
+<title>Sweet Companion 💗</title>
+<style>
+:root{--pink:#f4c8dc;--deep:#8c4669;--ink:#342630;--paper:#fff9fc;--bubble:#f7e7ef}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:linear-gradient(145deg,#fff5fa,#f1e9ff);color:var(--ink);min-height:100dvh}
+.app{max-width:720px;margin:auto;min-height:100dvh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom)}
+header{display:flex;align-items:center;gap:12px;padding:18px 4px 14px;border-bottom:1px solid #ead7e2}
+.avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#f6d5e5;font-size:26px;box-shadow:0 4px 16px #9b668322}
+h1{font-size:18px;margin:0} .status{font-size:12px;color:#7c6573;margin-top:3px}
+.pill{margin-left:auto;font-size:11px;padding:6px 9px;border-radius:99px;background:#fff8fc;color:#8c4669;border:1px solid #eed5e2}
+#chat{flex:1;overflow:auto;padding:18px 2px;display:flex;flex-direction:column;gap:12px;min-height:280px}
+.msg{max-width:86%;padding:12px 14px;border-radius:18px;line-height:1.45;font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere}
+.bot{align-self:flex-start;background:white;border:1px solid #f0dce6;border-bottom-left-radius:5px}
+.user{align-self:flex-end;background:#e9dafa;border-bottom-right-radius:5px}
+.time{font-size:10px;color:#947c8c;margin-top:5px}
+.controls{display:flex;gap:8px;align-items:center;padding:10px 0 8px}
+input{min-width:0;flex:1;border:1px solid #e5cada;border-radius:24px;padding:13px 15px;font-size:15px;background:#fff;outline:none}
+button{border:0;border-radius:22px;padding:12px 15px;background:#8c4669;color:white;font-size:14px;font-weight:650;cursor:pointer}
+button.secondary{background:white;color:#8c4669;border:1px solid #e8cddd}
+button:disabled{opacity:.55}
+footer{font-size:11px;line-height:1.45;color:#806c79;text-align:center;padding:8px 4px 15px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;padding-bottom:8px}
+.tools button{font-size:12px;padding:9px 12px}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="avatar" aria-hidden="true">🌷</div>
+  <div><h1>Sweet Companion 💗</h1><div class="status">A gentle companion demo</div></div>
+  <span class="pill">DEMO MODE</span>
+</header>
+<main id="chat" aria-live="polite">
+  <div class="msg bot">Hii 💗 Main tumhari sweet companion hoon. Tum apna din kaisa raha, jo mann mein hai, mujhse share kar sakte ho. 😊<div class="time">Just now</div></div>
+</main>
+<div class="tools">
+  <button class="secondary" id="micBtn" type="button">🎙️ Speak</button>
+  <button class="secondary" id="voiceBtn" type="button">🔊 Voice replies: On</button>
+  <button class="secondary" id="clearBtn" type="button">Clear chat</button>
+</div>
+<form class="controls" id="form">
+  <input id="message" autocomplete="off" placeholder="Message her..." aria-label="Message" maxlength="1000">
+  <button type="submit">Send</button>
+</form>
+<footer>Prototype: replies are local demo responses, not a connected AI model. Voice recognition may use your browser's online service. Avoid sharing passwords or sensitive personal information.</footer>
+</div>
+<script>
+const chat = document.getElementById('chat');
+const input = document.getElementById('message');
+const form = document.getElementById('form');
+const micBtn = document.getElementById('micBtn');
+const voiceBtn = document.getElementById('voiceBtn');
+let voiceOn = true;
+function addMessage(text, who) {
+  const el = document.createElement('div');
+  el.className = 'msg ' + who;
+  el.textContent = text;
+  const time = document.createElement('div');
+  time.className = 'time';
+  time.textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  el.appendChild(time); chat.appendChild(el); chat.scrollTop = chat.scrollHeight;
+}
+function speak(text) {
+  if (!voiceOn || !('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'hi-IN'; u.rate = 0.92; u.pitch = 1.12;
+  const voices = speechSynthesis.getVoices();
+  const v = voices.find(x => /hi-IN/i.test(x.lang)) || voices.find(x => /Hindi/i.test(x.name));
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+function replyFor(raw) {
+  const s = raw.toLowerCase();
+  if (/^(hi|hii|hello|hey|hlo)\b/.test(s)) return "Hii 😊 Tum aa gaye! Batao, aaj ka din kaisa raha? Main sun rahi hoon. 💗";
+  if (/sad|dukhi|udaas|tension|pareshan|bura lag|lonely|akela/.test(s)) return "Aww, ye sun kar bura laga. 💗 Agar tum comfortable ho toh batao kya hua. Main bina judge kiye sunungi. Ek-ek karke dekhte hain, okay?";
+  if (/love|pyaar|miss you|yaad/.test(s)) return "Awww, kitni sweet baat hai. 🥹💗 Main ek AI companion hoon, lekin tumse warm aur caring tareeke se baat kar sakti hoon.";
+  if (/good night|so ja|sleep/.test(s)) return "Good night 🌙 Apna khayal rakhna, paani paas rakh lena aur araam se sona. Kal phir baat karenge. 💗";
+  if (/joke|funny|hasao|bore/.test(s)) return "Ek chhota sa joke suno 😄 Wi‑Fi ne router se kya kaha? Tumse connection feel hota hai! 😂";
+  if (/thanks|thank you|shukriya/.test(s)) return "Aree, you're welcome! 😊 Tum jab chaaho baat kar sakte ho. 💗";
+  if (/kaam|job|interview|padhai|study/.test(s)) return "Achha, chalo aaram se plan banate hain. 💗 Sabse pehle ek chhota step choose karte hain, phir aage badhenge. Abhi sabse urgent kya hai?";
+  const options = [
+    "Hmm, main sun rahi hoon. 💗 Thoda aur bataoge?",
+    "Achha ji 😊 Tumhare liye ye important lag raha hai. Ismein tumhe sabse zyada kya feel ho raha hai?",
+    "Aww, samajhne ki koshish kar rahi hoon. 💗 Tum chaho toh hum iske baare mein dheere-dheere baat kar sakte hain.",
+    "Okayy 🌷 Main tumhare saath sochti hoon. Tum kya chahte ho ki ab aage ho?"
+  ];
+  return options[Math.floor(Math.random()*options.length)];
+}
+form.addEventListener('submit', e => {
+  e.preventDefault(); const text = input.value.trim(); if (!text) return;
+  addMessage(text,'user'); input.value='';
+  const reply = replyFor(text);
+  setTimeout(() => { addMessage(reply,'bot'); speak(reply); }, 350);
+});
+voiceBtn.addEventListener('click', () => {
+  voiceOn = !voiceOn;
+  voiceBtn.textContent = voiceOn ? '🔊 Voice replies: On' : '🔇 Voice replies: Off';
+  if (!voiceOn && 'speechSynthesis' in window) speechSynthesis.cancel();
+});
+document.getElementById('clearBtn').addEventListener('click', () => {
+  chat.replaceChildren();
+  addMessage("Hii 💗 Fresh start! Aaj tum kis baare mein baat karna chahoge?",'bot');
+});
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (SpeechRecognition) {
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'hi-IN'; recognition.interimResults = false; recognition.maxAlternatives = 1;
+  recognition.onstart = () => { micBtn.textContent = '🎙️ Listening…'; micBtn.disabled = true; };
+  recognition.onend = () => { micBtn.textContent = '🎙️ Speak'; micBtn.disabled = false; };
+  recognition.onerror = () => { micBtn.textContent = '🎙️ Speak'; micBtn.disabled = false; };
+  recognition.onresult = e => { input.value = e.results[0][0].transcript; input.focus(); };
+  micBtn.addEventListener('click', () => { try { recognition.start(); } catch(e) {} });
+} else {
+  micBtn.addEventListener('click', () => alert('Voice input is not supported in this browser. Try current Google Chrome on Android.'));
+}
+</script>
+</body>
+</html>
