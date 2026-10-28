@@ -3,123 +3,142 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#f6d8e7">
-<meta name="description" content="A gentle, supportive AI companion demo">
-<title>Sweet Companion 💗</title>
+<meta name="theme-color" content="#075e54">
+<title>Sweet Companion</title>
 <style>
-:root{--pink:#f4c8dc;--deep:#8c4669;--ink:#342630;--paper:#fff9fc;--bubble:#f7e7ef}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:linear-gradient(145deg,#fff5fa,#f1e9ff);color:var(--ink);min-height:100dvh}
-.app{max-width:720px;margin:auto;min-height:100dvh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom)}
-header{display:flex;align-items:center;gap:12px;padding:18px 4px 14px;border-bottom:1px solid #ead7e2}
-.avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#f6d5e5;font-size:26px;box-shadow:0 4px 16px #9b668322}
-h1{font-size:18px;margin:0} .status{font-size:12px;color:#7c6573;margin-top:3px}
-.pill{margin-left:auto;font-size:11px;padding:6px 9px;border-radius:99px;background:#fff8fc;color:#8c4669;border:1px solid #eed5e2}
-#chat{flex:1;overflow:auto;padding:18px 2px;display:flex;flex-direction:column;gap:12px;min-height:280px}
-.msg{max-width:86%;padding:12px 14px;border-radius:18px;line-height:1.45;font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere}
-.bot{align-self:flex-start;background:white;border:1px solid #f0dce6;border-bottom-left-radius:5px}
-.user{align-self:flex-end;background:#e9dafa;border-bottom-right-radius:5px}
-.time{font-size:10px;color:#947c8c;margin-top:5px}
-.controls{display:flex;gap:8px;align-items:center;padding:10px 0 8px}
-input{min-width:0;flex:1;border:1px solid #e5cada;border-radius:24px;padding:13px 15px;font-size:15px;background:#fff;outline:none}
-button{border:0;border-radius:22px;padding:12px 15px;background:#8c4669;color:white;font-size:14px;font-weight:650;cursor:pointer}
-button.secondary{background:white;color:#8c4669;border:1px solid #e8cddd}
-button:disabled{opacity:.55}
-footer{font-size:11px;line-height:1.45;color:#806c79;text-align:center;padding:8px 4px 15px}
-.tools{display:flex;gap:8px;flex-wrap:wrap;padding-bottom:8px}
-.tools button{font-size:12px;padding:9px 12px}
+:root{--green:#075e54;--green2:#128c7e;--chatbg:#efe7dd;--mine:#d9fdd3;--white:#fff;--ink:#111b21;--muted:#667781}
+*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#d7dbd8}
+.app{width:100%;max-width:760px;height:100dvh;margin:auto;background:var(--chatbg);display:flex;flex-direction:column;box-shadow:0 0 30px #0002;position:relative}
+header{height:66px;flex-shrink:0;background:var(--green);color:white;display:flex;align-items:center;padding:0 12px;gap:10px}
+.back{font-size:25px;line-height:1;padding:4px;color:#fff}
+.avatar{width:42px;height:42px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,#ffe0e9,#e4d5ff);display:grid;place-items:center;font-size:24px;border:1px solid #ffffff66}
+.person{min-width:0;flex:1}.name{font-size:16px;font-weight:600;white-space:nowrap}.sub{font-size:12px;color:#d4ebe7;margin-top:4px}
+.headbtn{font-size:22px;padding:5px;color:#fff}
+#chat{flex:1;overflow-y:auto;padding:16px 12px 12px;display:flex;flex-direction:column;gap:8px;background-color:var(--chatbg);background-image:radial-gradient(#c8bfb422 1px,transparent 1px);background-size:18px 18px}
+.day{text-align:center;align-self:center;background:#fff4c8;color:#54656d;border-radius:7px;padding:6px 10px;font-size:11px;box-shadow:0 1px 1px #0001;margin-bottom:5px}
+.msg{max-width:86%;padding:7px 8px 5px;border-radius:8px;font-size:14.5px;line-height:1.42;white-space:pre-wrap;overflow-wrap:anywhere;box-shadow:0 1px 1px #0001;position:relative}
+.bot{align-self:flex-start;background:#fff;border-top-left-radius:2px}
+.user{align-self:flex-end;background:var(--mine);border-top-right-radius:2px}
+.meta{display:flex;justify-content:flex-end;align-items:center;gap:4px;font-size:10px;color:#718087;margin-top:3px}
+.ticks{color:#53a6d7;font-weight:bold;font-size:12px}
+.typing{display:none;align-self:flex-start;background:white;padding:10px 13px;border-radius:10px;color:#738087;font-size:13px}
+.typing.show{display:block}
+.dots span{display:inline-block;width:5px;height:5px;background:#8b9a9f;border-radius:50%;margin:0 1px;animation:bounce 1s infinite}
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
+.composer{display:flex;align-items:flex-end;gap:7px;background:#f0f2f5;padding:8px 8px calc(8px + env(safe-area-inset-bottom));flex-shrink:0}
+.field{background:white;border-radius:24px;display:flex;align-items:center;gap:8px;padding:0 12px;flex:1;min-width:0}
+.field .emoji{font-size:22px;color:#69777d}
+#message{border:0;outline:none;background:transparent;padding:13px 0;font-size:15px;min-width:0;flex:1;color:var(--ink)}
+.iconbtn,.sendbtn{border:0;cursor:pointer;background:transparent;color:#54656d;font-size:22px;padding:8px 5px}
+.sendbtn{background:var(--green2);color:white;width:44px;height:44px;border-radius:50%;font-size:20px;display:grid;place-items:center;flex-shrink:0}
+.notice{background:#fff4c8;text-align:center;padding:5px 8px;font-size:10px;color:#596970}
+.panel{display:none;position:absolute;inset:66px 0 62px;background:#ffffffed;z-index:3;padding:24px;overflow:auto}
+.panel.show{display:block}.panel h2{margin-top:0;color:var(--green)}
+.panel button{background:var(--green2);color:white;border:0;border-radius:8px;padding:10px 14px;margin-top:10px}
+@media(min-width:761px){body{padding:16px 0}.app{height:calc(100dvh - 32px);border-radius:5px;overflow:hidden}}
 </style>
 </head>
 <body>
 <div class="app">
 <header>
+  <div class="back" aria-hidden="true">‹</div>
   <div class="avatar" aria-hidden="true">🌷</div>
-  <div><h1>Sweet Companion 💗</h1><div class="status">A gentle companion demo</div></div>
-  <span class="pill">DEMO MODE</span>
+  <div class="person"><div class="name">Mira 💗</div><div class="sub" id="status">AI companion · demo mode</div></div>
+  <button class="headbtn" id="voiceToggle" title="Voice replies" aria-label="Toggle voice replies">🔊</button>
+  <button class="headbtn" id="moreBtn" title="About" aria-label="About">⋮</button>
 </header>
+<div class="notice">Your private companion demo · Replies are generated by simple rules, not a connected AI model</div>
 <main id="chat" aria-live="polite">
-  <div class="msg bot">Hii 💗 Main tumhari sweet companion hoon. Tum apna din kaisa raha, jo mann mein hai, mujhse share kar sakte ho. 😊<div class="time">Just now</div></div>
+  <div class="day">TODAY</div>
+  <div class="msg bot">Hii 😊💗 Tum aa gaye! Main Mira hoon. Aaj tumhara din kaisa raha? Batao na, main sun rahi hoon.<div class="meta"><span>now</span></div></div>
 </main>
-<div class="tools">
-  <button class="secondary" id="micBtn" type="button">🎙️ Speak</button>
-  <button class="secondary" id="voiceBtn" type="button">🔊 Voice replies: On</button>
-  <button class="secondary" id="clearBtn" type="button">Clear chat</button>
+<div class="typing" id="typing">Mira is typing <span class="dots"><span></span><span></span><span></span></span></div>
+<div class="composer">
+  <div class="field">
+    <button class="iconbtn" id="emojiBtn" aria-label="Add heart">♡</button>
+    <input id="message" placeholder="Message" autocomplete="off" maxlength="1500" aria-label="Message">
+    <button class="iconbtn" id="micBtn" aria-label="Voice input">🎙</button>
+  </div>
+  <button class="sendbtn" id="sendBtn" aria-label="Send message">➤</button>
 </div>
-<form class="controls" id="form">
-  <input id="message" autocomplete="off" placeholder="Message her..." aria-label="Message" maxlength="1000">
-  <button type="submit">Send</button>
-</form>
-<footer>Prototype: replies are local demo responses, not a connected AI model. Voice recognition may use your browser's online service. Avoid sharing passwords or sensitive personal information.</footer>
+<section class="panel" id="about">
+  <h2>About Mira 💗</h2>
+  <p>Mira is an AI companion demo designed to chat in a sweet, shy and supportive Hinglish style.</p>
+  <p><b>Current version:</b> replies use simple local rules. This is not a real person and is not yet connected to a generative AI model.</p>
+  <p>Voice recognition and spoken replies depend on browser support. Microphone recognition may be processed by your browser's service.</p>
+  <button id="closeAbout">Back to chat</button>
+</section>
 </div>
 <script>
-const chat = document.getElementById('chat');
-const input = document.getElementById('message');
-const form = document.getElementById('form');
-const micBtn = document.getElementById('micBtn');
-const voiceBtn = document.getElementById('voiceBtn');
-let voiceOn = true;
-function addMessage(text, who) {
-  const el = document.createElement('div');
-  el.className = 'msg ' + who;
-  el.textContent = text;
-  const time = document.createElement('div');
-  time.className = 'time';
-  time.textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-  el.appendChild(time); chat.appendChild(el); chat.scrollTop = chat.scrollHeight;
+const chat=document.getElementById('chat'), input=document.getElementById('message');
+const typing=document.getElementById('typing'), statusEl=document.getElementById('status');
+let voiceOn=true, idleTimer=null, proactiveTimer=null, lastUserAt=Date.now(), proactiveCount=0;
+const KEY='mira_companion_history_v1';
+function timeNow(){return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}
+function scrollBottom(){chat.scrollTop=chat.scrollHeight}
+function addMessage(text,who,save=true){
+  const el=document.createElement('div'); el.className='msg '+who;
+  el.appendChild(document.createTextNode(text));
+  const meta=document.createElement('div');meta.className='meta';
+  const t=document.createElement('span');t.textContent=timeNow();meta.appendChild(t);
+  if(who==='user'){const ticks=document.createElement('span');ticks.className='ticks';ticks.textContent='✓✓';meta.appendChild(ticks)}
+  el.appendChild(meta);chat.appendChild(el);scrollBottom();
+  if(save){const arr=loadHistory();arr.push({text,who,at:Date.now()});localStorage.setItem(KEY,JSON.stringify(arr.slice(-150)))}
 }
-function speak(text) {
-  if (!voiceOn || !('speechSynthesis' in window)) return;
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'hi-IN'; u.rate = 0.92; u.pitch = 1.12;
-  const voices = speechSynthesis.getVoices();
-  const v = voices.find(x => /hi-IN/i.test(x.lang)) || voices.find(x => /Hindi/i.test(x.name));
-  if (v) u.voice = v;
-  speechSynthesis.speak(u);
+function loadHistory(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
+function speak(text){if(!voiceOn||!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='hi-IN';u.rate=.91;u.pitch=1.16;const vs=speechSynthesis.getVoices();const v=vs.find(x=>/hi-IN/i.test(x.lang));if(v)u.voice=v;speechSynthesis.speak(u)}
+function replyFor(raw){
+ const s=raw.toLowerCase();
+ if(/\b(hi|hii|hello|hey|hlo)\b/.test(s))return "Hii 😊💗 Main yahin hoon. Aaj ka din kaisa gaya tumhara?";
+ if(/sad|dukhi|udaas|tension|pareshan|bura lag|lonely|akela|rona/.test(s))return "Aww 🥺💗 Kya hua? Agar tum comfortable ho toh mujhe batao. Main bina judge kiye sunungi, okay?";
+ if(/love|pyaar|miss you|yaad/.test(s))return "Awww, tum kitni sweet baatein karte ho 🙈💗 Main AI companion hoon, par tumse caring tareeke se baat kar sakti hoon.";
+ if(/good night|so ja|sleep|sone/.test(s))return "Good night 🌙💗 Apna khayal rakhna, araam se sona. Kal phir baat karenge.";
+ if(/joke|funny|hasao|bore/.test(s))return "Achha ek cute sa joke 😄 Wi-Fi ne router se kaha: tumse mera connection bahut strong hai! 😂";
+ if(/thanks|thank you|shukriya/.test(s))return "Aree, welcome ji 😊💗 Tum aaram se baat karo.";
+ if(/job|kaam|interview|padhai|study|future/.test(s))return "Hmm, chalo ek-ek step karke sochte hain. 💗 Abhi tumhare liye sabse important cheez kya hai?";
+ if(/kya kar|what are you doing/.test(s))return "Bas tumse baat kar rahi hoon 🙈💗 Tum kya kar rahe ho?";
+ const options=[
+  "Achha ji 😊💗 Thoda aur batao na, main sun rahi hoon.",
+  "Hmm 🙈 Mujhe tumhari baat samajhni hai. Isse tumhe kaisa feel ho raha hai?",
+  "Aww, okay 💗 Tum aaram se batao. Jaldi nahi hai.",
+  "Sach mein? 😊 Phir aage kya hua? Mujhe batao na.",
+  "Main sun rahi hoon 🌷 Tum chaho toh hum milkar iske baare mein soch sakte hain."
+ ];
+ return options[Math.floor(Math.random()*options.length)];
 }
-function replyFor(raw) {
-  const s = raw.toLowerCase();
-  if (/^(hi|hii|hello|hey|hlo)\b/.test(s)) return "Hii 😊 Tum aa gaye! Batao, aaj ka din kaisa raha? Main sun rahi hoon. 💗";
-  if (/sad|dukhi|udaas|tension|pareshan|bura lag|lonely|akela/.test(s)) return "Aww, ye sun kar bura laga. 💗 Agar tum comfortable ho toh batao kya hua. Main bina judge kiye sunungi. Ek-ek karke dekhte hain, okay?";
-  if (/love|pyaar|miss you|yaad/.test(s)) return "Awww, kitni sweet baat hai. 🥹💗 Main ek AI companion hoon, lekin tumse warm aur caring tareeke se baat kar sakti hoon.";
-  if (/good night|so ja|sleep/.test(s)) return "Good night 🌙 Apna khayal rakhna, paani paas rakh lena aur araam se sona. Kal phir baat karenge. 💗";
-  if (/joke|funny|hasao|bore/.test(s)) return "Ek chhota sa joke suno 😄 Wi‑Fi ne router se kya kaha? Tumse connection feel hota hai! 😂";
-  if (/thanks|thank you|shukriya/.test(s)) return "Aree, you're welcome! 😊 Tum jab chaaho baat kar sakte ho. 💗";
-  if (/kaam|job|interview|padhai|study/.test(s)) return "Achha, chalo aaram se plan banate hain. 💗 Sabse pehle ek chhota step choose karte hain, phir aage badhenge. Abhi sabse urgent kya hai?";
-  const options = [
-    "Hmm, main sun rahi hoon. 💗 Thoda aur bataoge?",
-    "Achha ji 😊 Tumhare liye ye important lag raha hai. Ismein tumhe sabse zyada kya feel ho raha hai?",
-    "Aww, samajhne ki koshish kar rahi hoon. 💗 Tum chaho toh hum iske baare mein dheere-dheere baat kar sakte hain.",
-    "Okayy 🌷 Main tumhare saath sochti hoon. Tum kya chahte ho ki ab aage ho?"
-  ];
-  return options[Math.floor(Math.random()*options.length)];
+function showTyping(){typing.classList.add('show');statusEl.textContent='typing…';scrollBottom()}
+function hideTyping(){typing.classList.remove('show');statusEl.textContent='AI companion · demo mode'}
+function send(text=input.value.trim()){
+ if(!text)return;addMessage(text,'user');input.value='';lastUserAt=Date.now();proactiveCount=0;showTyping();
+ setTimeout(()=>{hideTyping();const r=replyFor(text);addMessage(r,'bot');speak(r);scheduleProactive()},700+Math.random()*700);
 }
-form.addEventListener('submit', e => {
-  e.preventDefault(); const text = input.value.trim(); if (!text) return;
-  addMessage(text,'user'); input.value='';
-  const reply = replyFor(text);
-  setTimeout(() => { addMessage(reply,'bot'); speak(reply); }, 350);
-});
-voiceBtn.addEventListener('click', () => {
-  voiceOn = !voiceOn;
-  voiceBtn.textContent = voiceOn ? '🔊 Voice replies: On' : '🔇 Voice replies: Off';
-  if (!voiceOn && 'speechSynthesis' in window) speechSynthesis.cancel();
-});
-document.getElementById('clearBtn').addEventListener('click', () => {
-  chat.replaceChildren();
-  addMessage("Hii 💗 Fresh start! Aaj tum kis baare mein baat karna chahoge?",'bot');
-});
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-if (SpeechRecognition) {
-  const recognition = new SpeechRecognition();
-  recognition.lang = 'hi-IN'; recognition.interimResults = false; recognition.maxAlternatives = 1;
-  recognition.onstart = () => { micBtn.textContent = '🎙️ Listening…'; micBtn.disabled = true; };
-  recognition.onend = () => { micBtn.textContent = '🎙️ Speak'; micBtn.disabled = false; };
-  recognition.onerror = () => { micBtn.textContent = '🎙️ Speak'; micBtn.disabled = false; };
-  recognition.onresult = e => { input.value = e.results[0][0].transcript; input.focus(); };
-  micBtn.addEventListener('click', () => { try { recognition.start(); } catch(e) {} });
-} else {
-  micBtn.addEventListener('click', () => alert('Voice input is not supported in this browser. Try current Google Chrome on Android.'));
-}
+document.getElementById('sendBtn').addEventListener('click',()=>send());
+input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();send()}});
+document.getElementById('emojiBtn').addEventListener('click',()=>{input.value+='💗';input.focus()});
+document.getElementById('voiceToggle').addEventListener('click',e=>{voiceOn=!voiceOn;e.currentTarget.textContent=voiceOn?'🔊':'🔇';if(!voiceOn&&'speechSynthesis'in window)speechSynthesis.cancel()});
+document.getElementById('moreBtn').addEventListener('click',()=>document.getElementById('about').classList.add('show'));
+document.getElementById('closeAbout').addEventListener('click',()=>document.getElementById('about').classList.remove('show'));
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(SR){const rec=new SR();rec.lang='hi-IN';rec.interimResults=false;rec.onstart=()=>{statusEl.textContent='listening…'};rec.onend=()=>{statusEl.textContent='AI companion · demo mode'};rec.onresult=e=>{input.value=e.results[0][0].transcript;input.focus()};document.getElementById('micBtn').addEventListener('click',()=>{try{rec.start()}catch(e){}})}
+else document.getElementById('micBtn').addEventListener('click',()=>alert('Voice input is not supported in this browser. Try Chrome on Android over HTTPS.'));
+// Restore recent messages saved on this browser
+const old=loadHistory();
+if(old.length){chat.innerHTML='<div class="day">TODAY</div>';old.slice(-80).forEach(m=>{const el=document.createElement('div');el.className='msg '+(m.who==='user'?'user':'bot');el.appendChild(document.createTextNode(m.text));const meta=document.createElement('div');meta.className='meta';meta.textContent=new Date(m.at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});el.appendChild(meta);chat.appendChild(el)});scrollBottom()}
+// Friendly proactive prompts only while this page remains open; notifications require separate permission and background support.
+const proactive=[
+ "Hii 😊 Bas tumhara khayal aaya, kaisa chal raha hai sab? 💗",
+ "Aaj kuch khaya hai na? Apna dhyan bhi rakha karo 🙈",
+ "Main yahin hoon agar tumhara baat karne ka mann ho 🌷",
+ "Ek chhoti si hello bolne aayi thi 😊 Kya kar rahe ho?"
+];
+function scheduleProactive(){clearTimeout(proactiveTimer);if(proactiveCount>=2)return;proactiveTimer=setTimeout(()=>{
+ if(document.visibilityState==='visible' && Date.now()-lastUserAt>90000){
+  proactiveCount++;const msg=proactive[Math.floor(Math.random()*proactive.length)];addMessage(msg,'bot');speak(msg);
+ }
+},90000)}
+scheduleProactive();
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible' && Date.now()-lastUserAt>180000 && proactiveCount<2){const msg='Hii 😊 Wapas aa gaye? Sab theek hai na? 💗';addMessage(msg,'bot');speak(msg);lastUserAt=Date.now();proactiveCount++}});
 </script>
 </body>
 </html>
